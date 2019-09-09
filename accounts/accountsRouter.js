@@ -5,15 +5,72 @@ const db = require('../data/dbConfig');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    db('accounts')
-        .select('*')
-        .then(users => {
-            res.status(200).json(users)
-        })
-        .catch(err => {
-            res.status(400).json({ message: 'error retrieving users'})
-        })
-})
+
+    const { limit, sortby, sortdir } = req.query;
+
+    if (limit && sortby && sortdir) {
+        db('accounts')
+            .select('*')
+            .orderBy(sortby, sortby)
+            .limit(limit)
+            .then(users => {
+                res.status(200).json(users)
+            })
+            .catch(err => {
+                res.status(400).json({ message: 'error retrieving users'})
+            })
+    } else if (sortby && sortdir){ 
+        db('accounts')
+            .select('*')
+            .orderBy(sortby, sortdir)
+            .then(users => {
+                res.status(200).json(users)
+            })
+            .catch(err => {
+                res.status(400).json({ message: 'error retrieving users'})
+            })
+    } else if (sortby && limit) {
+        db('accounts')
+            .select('*')
+            .orderBy(sortby)
+            .limit(limit)
+            .then(users => {
+                res.status(200).json(users)
+            })
+            .catch(err => {
+                res.status(400).json({ message: 'error retrieving users'})
+            })
+    } else if (sortby) {
+        db('accounts')
+            .select('*')
+            .orderBy(sortby)
+            .then(users => {
+                res.status(200).json(users)
+            })
+            .catch(err => {
+                res.status(400).json({ message: 'error retrieving users'})
+            })
+    } else if (limit) {
+        db('accounts')
+            .select('*')
+            .limit(limit)
+            .then(users => {
+                res.status(200).json(users)
+            })
+            .catch(err => {
+                res.status(400).json({ message: 'error retrieving users'})
+            })
+    } else {
+        db('accounts')
+            .select('*')
+            .then(users => {
+                res.status(200).json(users)
+            })
+            .catch(err => {
+                res.status(400).json({ message: 'error retrieving users'})
+            })
+    }
+}) //change to switch
 
 router.get('/:id', (req, res) => {
     const { id } = req.params;
