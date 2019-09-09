@@ -49,26 +49,39 @@ router.post('/', (req, res) => {
         })
 }) // add validation
 
+// router.put('/:id', (req, res) => {
+//     const { id } = req.params;
+//     const changes = req.body;
+
+//     db('accounts')
+//         .where('id', id)
+//         .update(changes)
+//         .then(count => {
+//             res.status(200).json({ message: `updated ${count}`})
+//         })
+//         .catch(err => {
+//             res.status(400).json({ message: 'error updating record' })
+//         })
+// }) // fix
 router.put('/:id', (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
     const changes = req.body;
 
     db('accounts')
         .where('id', id)
         .update(changes)
         .then(count => {
-            res.status(200).json({ message: `deleted ${count}`})
+            res.status(200).json({ message: `updated ${count}`})
         })
         .catch(err => {
-            res.status(400).json({ message: 'error deleting record' })
+            res.status(400).json({ message: 'error updating record' })
         })
-})
+}) // fix
 
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
- 
-    db('posts')
-        .where({ id })
+    db('accounts')
+        .where('id', id)
         .del()
         .then(count => {
             res.status(200).json({ message: `deleted ${count}`})
